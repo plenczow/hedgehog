@@ -1,0 +1,108 @@
+;Initial setup
+	#SingleInstance force
+
+;Adding tray menu for config
+	Menu, Tray, Click, 1
+	Menu, Tray, Add, Configure hotkeys, HotConf
+	
+;Variable setup
+;Obtainig variables for webhotkeys
+	Try
+	{	
+		FileReadLine, jirakeytkt, %A_ScriptDir%\Config\webhotkeys.cfg, 1
+		Hotkey, %jirakeytkt%, hot1
+		FileReadLine, jirakeyopen, %A_ScriptDir%\Config\webhotkeys.cfg, 2
+		Hotkey, %jirakeyopen%, hot2
+		FileReadLine, combobox, %A_ScriptDir%\Config\webhotkeys.cfg, 3
+		Hotkey, %combobox%, hot3
+		FileReadLine, zensearch, %A_ScriptDir%\Config\webhotkeys.cfg, 4
+		Hotkey, %zensearch%, hot4
+	}
+
+;Obtainig variables for mailhotkeys
+	Try
+	{
+		FileReadLine, improvement, %A_ScriptDir%\Config\mailhotkeys.cfg, 1
+		Hotkey, %improvement%, hot5
+		FileReadLine, feedback, %A_ScriptDir%\Config\mailhotkeys.cfg, 2
+		Hotkey, %feedback%, hot6
+	}
+
+;Scriptstop to avoid automatic firing of HotConf function
+	return
+
+;Firing config application.
+	HotConf:
+	{
+		Run Hedgehog_conf.exe
+		return
+	}
+
+;Hotkey actions
+	hot1:
+	{
+		Run https://jira.dev.xtrf.eu/secure/CreateIssue!default.jspa
+		return
+	}
+
+	hot2:
+	{
+		Clipboard := ""     										
+		Send, ^c            										
+		ClipWait, 2         										
+		if (ErrorLevel)	    										
+			return													
+		clipboard = %clipboard%   									
+		Ticket = %clipboard%	  									
+		Run https://jira.dev.xtrf.eu/browse/%Ticket% 				
+		return															
+	}
+
+	hot3:
+	{
+		Clipboard := ""     										
+		Send, ^c            										
+		ClipWait, 2         										
+		if (ErrorLevel)	    										
+			return													
+		clipboard = %clipboard%   									
+		Ticket = %clipboard%	  									
+		Run https://jira.dev.xtrf.eu/browse/%Ticket% 				
+		Run https://xtrf.zendesk.com/search?utf8=✓&query=%Ticket%	
+		return														
+	}
+
+	hot4:
+	{
+		Clipboard := ""     										
+		Send, ^c            										
+		ClipWait, 2         										
+		if (ErrorLevel)	    										
+			return													
+		clipboard = %clipboard%   									
+		Ticket = %clipboard%	  									
+		Run https://xtrf.zendesk.com/search?utf8=✓&query=%Ticket%	
+		return															
+	}
+
+	hot5:
+	{
+		FileRead, body, %A_ScriptDir%\Templates\improvement.txt
+		Clipboard := body
+		ClipWait
+		Run mailto:lk@xtrf.eu?subject=Improvement -
+		WinWaitActive, Tworzenie: Improvement -
+		Send, ^v
+		return
+	}
+
+	hot6:
+	{
+		FileRead, body1, %A_ScriptDir%\Templates\feedback.txt
+		Clipwait
+		Clipboard := body1
+		Run mailto:marketing@xtrf.eu; lk@xtrf.eu; michal.korzycki@xtrf.eu?subject=Provider Portal Feedback
+		WinWaitActive, Tworzenie: Provider Portal Feedback
+		Send, ^v
+		return
+	}
