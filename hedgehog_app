@@ -4,38 +4,58 @@
 ;Adding tray menu for config
 	Menu, Tray, Click, 1
 	Menu, Tray, Add, Configure hotkeys, HotConf
+	Menu, Tray, Add, Show my hotkeys, HotShow
 	
 ;Variable setup
 ;Obtainig variables for webhotkeys
 	Try
 	{	
-		FileReadLine, jirakeytkt, %A_ScriptDir%\Config\webhotkeys.cfg, 1
+		FileReadLine, jirakeytkt, %A_ScriptDir%\Config\webhotkeys.cfg, 2
 		Hotkey, %jirakeytkt%, hot1
-		FileReadLine, jirakeyopen, %A_ScriptDir%\Config\webhotkeys.cfg, 2
+		FileReadLine, jirakeyopen, %A_ScriptDir%\Config\webhotkeys.cfg, 4
 		Hotkey, %jirakeyopen%, hot2
-		FileReadLine, combobox, %A_ScriptDir%\Config\webhotkeys.cfg, 3
+		FileReadLine, combobox, %A_ScriptDir%\Config\webhotkeys.cfg, 6
 		Hotkey, %combobox%, hot3
-		FileReadLine, zensearch, %A_ScriptDir%\Config\webhotkeys.cfg, 4
+		FileReadLine, zensearch, %A_ScriptDir%\Config\webhotkeys.cfg, 8
 		Hotkey, %zensearch%, hot4
+		FileReadLine, searchstring, %A_ScriptDir%\Config\webhotkeys.cfg, 10
+		Hotkey, %searchstring%, hot7
 	}
 
 ;Obtainig variables for mailhotkeys
 	Try
 	{
-		FileReadLine, improvement, %A_ScriptDir%\Config\mailhotkeys.cfg, 1
+		FileReadLine, improvement, %A_ScriptDir%\Config\mailhotkeys.cfg, 2
 		Hotkey, %improvement%, hot5
-		FileReadLine, feedback, %A_ScriptDir%\Config\mailhotkeys.cfg, 2
+		FileReadLine, feedback, %A_ScriptDir%\Config\mailhotkeys.cfg, 4
 		Hotkey, %feedback%, hot6
 	}
 
 ;Scriptstop to avoid automatic firing of HotConf function
 	return
 
-;Firing config application.
+;Firing config application
 	HotConf:
 	{
 		Run Hedgehog_conf.exe
 		return
+	}
+	
+;A function showing current hotkey configuration
+	HotShow:
+	{
+	FileRead, HotkeyShow1, %A_ScriptDir%\Config\webhotkeys.cfg
+	FileRead, HotkeyShow2, %A_ScriptDir%\Config\mailhotkeys.cfg
+	StringReplace, HotkeyShow1, HotkeyShow1, +, Shift+, All
+	StringReplace, HotkeyShow1, HotkeyShow1, !, Alt+, All
+	StringReplace, HotkeyShow1, HotkeyShow1, #, Win+, All
+	StringReplace, HotkeyShow1, HotkeyShow1, ^, Ctrl+, All
+	StringReplace, HotkeyShow2, HotkeyShow2, +, Shift+, All
+	StringReplace, HotkeyShow2, HotkeyShow2, !, Alt+, All
+	StringReplace, HotkeyShow2, HotkeyShow2, #, Win+, All
+	StringReplace, HotkeyShow2, HotkeyShow2, ^, Ctrl+, All
+	MsgBox, %HotkeyShow1%`n%HotkeyShow2%
+	return
 	}
 
 ;Hotkey actions
@@ -106,3 +126,30 @@
 		Send, ^v
 		return
 	}
+	
+	hot7:
+	{
+		Clipboard := ""     										
+		Send, ^c            										
+		ClipWait, 2         										
+		if (ErrorLevel)	    										
+			return													
+		clipboard = %clipboard%   									
+		Sstring = %clipboard%	  									
+		Run https://knowledgebase.xtrf.eu/dosearchsite.action?queryString=%Sstring% 				
+		return														
+	}
+		
+
+;"ś" in Zendesk workaround
+	<^>!s::
+		Char := "ś"
+		Clipboard = %Char%
+		Send, ^v
+	Return
+
+	^!s::
+	Char := "ś"
+		Clipboard = %Char%
+		Send, ^v
+	Return
