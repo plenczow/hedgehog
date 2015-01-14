@@ -18,5 +18,5 @@ Mail actions:
 2) Provider portal feedback;
 
 The tool additionally allows for the input of "ś" character in Zendesk without trigerring autosend action.
-
+IMPORTANT: Encoding of the source file before compilation needs to be set to UTF-8 for the "ś" workaround to work.
  
