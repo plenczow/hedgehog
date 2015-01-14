@@ -17,3 +17,4 @@ Mail actions:
 
 The tool additionally allows for the input of "ś" character in Zendesk without trigerring autosend action.
 
+ 
