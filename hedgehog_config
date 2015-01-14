@@ -1,93 +1,101 @@
 ;General application setup
-	#SingleInstance force
+#SingleInstance force
 
 ;Graphic user interface configuration
-
-	Gui, Tab, 1
-	Gui, Show, w245 h400, Hotkey setup
-	Gui, Add, Text, cRed, Choose your Hotkeys 
-	Gui, Add, Text,, (click on a field and press the shortcut you like)
-	Gui, Add, Text,, Create new Jira ticket:
-	Gui, Add, Hotkey, vChosenHotkey,
-	Gui, Add, CheckBox, vCB, Win
-	Gui, Add, Text,, Open a Jira ticket:
-	Gui, Add, Hotkey, vChosenHotkey2,
-	Gui, Add, CheckBox, vCB1, Win
-	Gui, Add, Text,, Open Jira tkt and search in Zen:
-	Gui, Add, Hotkey, vChosenHotkey3,
-	Gui, Add, CheckBox, vCB2, Win
-	Gui, Add, Text,, Search for a ticket in Zendesk:
-	Gui, Add, Hotkey, vChosenHotkey4,
-	Gui, Add, CheckBox, vCB3, Win
-	Gui, Font, underline
-	Gui, Add, Text, cBlue gAbout, About the tool
-	Gui, Font, norm
-	Gui, Add, button, gSave, Save
-	Gui, Tab, 2
-	Gui, Add, Text, cRed, Choose your Hotkeys 
-	Gui, Add, Text,, (click on a field and press the shortcut you like)
-	Gui, Add, Text,, Create an improvement e-mail:
-	Gui, Add, Hotkey, vIMP,
-	Gui, Add, CheckBox, vCB4, Win
-	Gui, Add, Text,, Portal feedback forward:
-	Gui, Add, Hotkey, vFDB,
-	Gui, Add, CheckBox, vCB5, Win
-	Gui, Font, underline
-	Gui, Add, Text, cBlue gAbout, About the tool
-	Gui, Font, norm
-	Gui, Add, button, gSave1, Save
-	return
+Gui,Add, Tab2,w245 h500, Web Hotkeys|E-mail hotkeys
+Gui, Tab, 1
+Gui, Show, w245 h500, Hotkey setup
+Gui, Add, Text, cRed, Choose your Hotkeys 
+Gui, Add, Text,, (click on a field and press the shortcut you like)
+Gui, Add, Text,, Create new Jira ticket:
+Gui, Add, CheckBox, vCB, Win+
+Gui, Add, Hotkey, vChosenHotkey,
+Gui, Add, Text,, Open a Jira ticket:
+Gui, Add, CheckBox, vCB1, Win+
+Gui, Add, Hotkey, vChosenHotkey2,
+Gui, Add, Text,, Open Jira tkt and search in Zen:
+Gui, Add, CheckBox, vCB2, Win+
+Gui, Add, Hotkey, vChosenHotkey3,
+Gui, Add, Text,, Search for a ticket in Zendesk:
+Gui, Add, CheckBox, vCB3, Win+
+Gui, Add, Hotkey, vChosenHotkey4,
+Gui, Add, Text,, Search in Confluence:
+Gui, Add, CheckBox, vCB6, Win+
+Gui, Add, Hotkey, vChosenHotkey5,
+Gui, Font, underline
+Gui, Add, Text, cBlue gAbout, About the tool
+Gui, Font, norm
+Gui, Add, button, gSave, Save
+Gui, Tab, 2
+Gui, Add, Text, cRed, Choose your Hotkeys 
+Gui, Add, Text,, (click on a field and press the shortcut you like)
+Gui, Add, Text,, Create an improvement e-mail:
+Gui, Add, CheckBox, vCB4, Win+
+Gui, Add, Hotkey, vIMP,
+Gui, Add, Text,, Portal feedback forward:
+Gui, Add, CheckBox, vCB5, Win+
+Gui, Add, Hotkey, vFDB,
+Gui, Font, underline
+Gui, Add, Text, cBlue gAbout, About the tool
+Gui, Font, norm
+Gui, Add, button, gSave1, Save
+return
 
 ;Submitting data to configuration files
-	Save:
-		Gui, submit, nohide
-		if CB=1
-			{
-				ChosenHotkey := "#"ChosenHotkey
-			}
-		if CB1=1
-			{
-				ChosenHotkey2 := "#"ChosenHotkey2
-			}
-		if CB2=1
-			{
-				ChosenHotkey3 := "#"ChosenHotkey3
-			}
-		if CB3=1
-			{
-				ChosenHotkey4 := "#"ChosenHotkey4
-			}
+Save:
+Gui, submit, nohide
+if CB=1
+{
+ChosenHotkey := "#"ChosenHotkey
+}
+if CB1=1
+{
+ChosenHotkey2 := "#"ChosenHotkey2
+}
+if CB2=1
+{
+ChosenHotkey3 := "#"ChosenHotkey3
+}
+if CB3=1
+{
+ChosenHotkey4 := "#"ChosenHotkey4
+}
+if CB6=1
+{
+ChosenHotkey5 := "#"ChosenHotkey5
+}
 
-		keys := ChosenHotkey "`n" ChosenHotkey2 "`n" ChosenHotkey3 "`n" ChosenHotkey4
-		filedelete, %A_ScriptDir%\Config\webhotkeys.cfg
-		fileappend, %keys%, %A_ScriptDir%\Config\webhotkeys.cfg
-		MsgBox, Hotkey configuration saved.
-		Run Hedgehog.exe
-		return
+keys := "Create new Jira ticket:" "`n" ChosenHotkey "`n" "Open a Jira ticket:" "`n" ChosenHotkey2 "`n" "Open Jira tkt & search in Zen:" "`n" ChosenHotkey3 "`n" "Search for a ticket in Zendesk:" "`n" ChosenHotkey4 "`n" "Search in Confluence:" "`n" ChosenHotkey5
+filedelete, %A_ScriptDir%\Config\webhotkeys.cfg
+fileappend, %keys%, %A_ScriptDir%\Config\webhotkeys.cfg
+MsgBox, Hotkey configuration saved.
+Run Hedgehog.exe
+return
 
-	Save1:
-		Gui, submit, nohide
-		if CB4=1
-			{
-				IMP := "#"IMP
-			}
-		if CB5=1
-			{
-				FDB := "#"FDB
-			}
+Save1:
+Gui, submit, nohide
 
-		keys := IMP "`n" FDB
-		filedelete, %A_ScriptDir%\Config\mailhotkeys.cfg
-		fileappend, %keys%, %A_ScriptDir%\Config\mailhotkeys.cfg
-		MsgBox, Hotkey configuration saved.
-		Run Hedgehog.exe
-		return
+if CB4=1
+{
+IMP := "#"IMP
+}
+if CB5=1
+{
+FDB := "#"FDB
+}
+
+keys := "Improvement e-mail:" "`n" IMP "`n" "Provider portal feedback forward:" "`n" FDB
+filedelete, %A_ScriptDir%\Config\mailhotkeys.cfg
+fileappend, %keys%, %A_ScriptDir%\Config\mailhotkeys.cfg
+MsgBox, Hotkey configuration saved.
+Run Hedgehog.exe
+return
 
 ;AppInfo popup window
-	About:
-		MsgBox, 0, About, -=Written by Piotr Lenczowski for XTRF Helpdesk in AutoHotkey 1.1.16.05. Compiler and libraries from: http://ahkscript.org=-
-		return
+About:
+MsgBox, 0, About, -=Written by Piotr Lenczowski for XTRF Helpdesk in AutoHotkey 1.1.16.05. Compiler and libraries from: http://ahkscript.org=-
+return
 
 ;Close config using windows environment
-	GuiClose:
-		ExitApp
+GuiClose:
+ExitApp
