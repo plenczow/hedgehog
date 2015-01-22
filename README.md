@@ -8,7 +8,7 @@ Web actions:
 
 1) Creation of Jira ticket;
 2) Opening a Jira ticket;
-3) Openng a Jira ticket and search in Zendesk;
+3) Opening a Jira ticket and search in Zendesk;
 4) Search in Zendesk;
 5) Search in Confluence knowledgebase;
 
